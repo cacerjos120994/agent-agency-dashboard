@@ -74,9 +74,11 @@ export interface Agent {
   health: 'Optimal' | 'Degraded' | 'Down';
   position: { x: number; y: number };
   tasksCompleted: number;
+  taskQueue: AgentTask[];
   currentTask?: string;
   lastInput?: string;
   lastOutput?: string;
+  recentInsights?: string[];
 }
 
 export interface Handoff {

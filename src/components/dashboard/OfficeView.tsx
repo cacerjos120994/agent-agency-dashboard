@@ -221,10 +221,10 @@ export default function OfficeView() {
                {/* Tabs */}
                <div className="flex gap-1 border-b border-slate-800 mt-6 overflow-x-auto scrollbar-hide">
                  {[
-                   { id: 'overview', icon: Zap, label: 'Ops' },
+                   { id: 'overview', icon: Zap, label: 'Task Queue' },
                    { id: 'identity', icon: Fingerprint, label: 'Identity' },
                    { id: 'sops', icon: BookOpen, label: 'SOPs' },
-                   { id: 'tools', icon: Wrench, label: 'Sys/Tools' }
+                   { id: 'tools', icon: Wrench, label: 'Sys/Memory' }
                  ].map(tab => (
                    <button 
                      key={tab.id}
@@ -243,16 +243,22 @@ export default function OfficeView() {
               {/* --- OVERVIEW TAB --- */}
               {activeTab === 'overview' && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-                  <div className="grid grid-cols-2 gap-3">
+                  {/* Task Summary Metrics */}
+                  <div className="grid grid-cols-3 gap-3">
                     <div className="bg-slate-950/50 p-3 rounded-lg border border-slate-800/50">
-                      <div className="text-[10px] text-slate-500 font-mono mb-1 uppercase">Efficiency</div>
-                      <div className="text-2xl font-bold text-emerald-400">{selectedAgent.efficiency}%</div>
+                      <div className="text-[10px] text-slate-500 font-mono mb-1 uppercase">Active</div>
+                      <div className="text-xl font-bold text-blue-400">{selectedAgent.taskQueue.filter(t => t.status === 'in_progress').length || (selectedAgent.currentTask ? 1 : 0)}</div>
                     </div>
                     <div className="bg-slate-950/50 p-3 rounded-lg border border-slate-800/50">
-                      <div className="text-[10px] text-slate-500 font-mono mb-1 uppercase">Tasks Done</div>
-                      <div className="text-2xl font-bold text-blue-400">{selectedAgent.tasksCompleted}</div>
+                      <div className="text-[10px] text-slate-500 font-mono mb-1 uppercase">Done</div>
+                      <div className="text-xl font-bold text-emerald-400">{selectedAgent.tasksCompleted}</div>
+                    </div>
+                    <div className="bg-slate-950/50 p-3 rounded-lg border border-red-900/30">
+                      <div className="text-[10px] text-red-500/70 font-mono mb-1 uppercase">Blocked</div>
+                      <div className="text-xl font-bold text-red-400">{selectedAgent.taskQueue.filter(t => t.status === 'blocked').length}</div>
                     </div>
                   </div>
+
                   {selectedAgent.currentTask && (
                     <section className="bg-blue-900/10 border border-blue-500/20 rounded-lg p-4 relative overflow-hidden">
                       <div className="absolute top-0 left-0 w-1 h-full bg-blue-500" />
@@ -266,6 +272,35 @@ export default function OfficeView() {
                       </div>
                     </section>
                   )}
+
+                  {/* Task Queue Rendering */}
+                  <section>
+                    <label className="text-[10px] uppercase tracking-wider text-slate-500 mb-3 block font-bold flex items-center gap-2">
+                      <BookOpen className="w-3 h-3" /> Task Queue Status
+                    </label>
+                    <div className="space-y-2">
+                      {selectedAgent.taskQueue.map(task => (
+                        <div key={task.id} className="bg-slate-900/50 border border-slate-800 p-3 rounded-lg flex items-start justify-between">
+                           <div>
+                              <div className="flex items-center gap-2 mb-1">
+                                 <span className={`text-[9px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded ${
+                                    task.status === 'completed' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                                    task.status === 'in_progress' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
+                                    task.status === 'blocked' ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
+                                    'bg-slate-800 text-slate-400 border border-slate-700'
+                                 }`}>
+                                   {task.status.replace('_', ' ')}
+                                 </span>
+                                 <span className={`text-[9px] uppercase tracking-widest ${task.priority === 'Critical' ? 'text-orange-400' : 'text-slate-500'}`}>
+                                   P: {task.priority}
+                                 </span>
+                              </div>
+                              <div className="text-xs text-slate-300 font-sans">{task.title}</div>
+                           </div>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
                   <section>
                     <label className="text-[10px] uppercase tracking-wider text-slate-500 mb-3 block font-bold flex items-center gap-2">
                       <Network className="w-3 h-3" /> Data Pipeline & Handoffs
@@ -362,6 +397,17 @@ export default function OfficeView() {
               {/* --- TOOLS & SYS TAB --- */}
               {activeTab === 'tools' && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+                  <section>
+                     <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold flex items-center gap-2"><BookOpen className="w-3 h-3" /> Agent Insights Store</h4>
+                     <ul className="space-y-2 bg-slate-800/20 p-3 rounded-lg border border-slate-700/50">
+                       {selectedAgent.recentInsights?.map((ins, i) => (
+                         <li key={i} className="text-xs text-slate-300 flex items-start gap-2 border-b border-slate-700/50 pb-2 last:border-0 last:pb-0">
+                           <span className="text-blue-500 mt-0.5">•</span>
+                           <span>{ins}</span>
+                         </li>
+                       ))}
+                     </ul>
+                  </section>
                   <section>
                      <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold flex items-center gap-2"><Wrench className="w-3 h-3" /> Private Tools</h4>
                      <div className="flex flex-wrap gap-2">

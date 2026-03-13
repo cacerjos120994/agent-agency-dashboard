@@ -1,4 +1,5 @@
 import { Agent, Deliverable, ActivityLog, Handoff } from '@/types';
+import { CeoModeData } from '@/types/ceo';
 
 export const INITIAL_AGENTS: Agent[] = [
   {
@@ -40,12 +41,21 @@ export const INITIAL_AGENTS: Agent[] = [
       secondaryReceivers: ['Manager Agent'],
       payloadMustInclude: ['top insights', 'top opportunities', 'top risks', 'hypotheses', 'confidence level']
     },
-    status: 'Researching',
+    status: 'Idle',
     efficiency: 94,
     health: 'Optimal',
     position: { x: 15, y: 25 },
     tasksCompleted: 42,
-    currentTask: 'Analizando tendencias de mercado para Q3',
+    taskQueue: [
+      { id: 'r1', title: 'Compile Top 10 competitor offers', status: 'completed', priority: 'Medium' },
+      { id: 'r2', title: 'Analyze TikTok trend "Office Setup"', status: 'completed', priority: 'High' },
+      { id: 'r3', title: 'Find audience pain points (Reddit scrape)', status: 'blocked', priority: 'Medium' }
+    ],
+    recentInsights: [
+      'Top 3 competitors have increased baseline pricing by 15%',
+      'Rising search trend for "ergonomic chairs"',
+      'High negative sentiment on TikTok for current ads'
+    ],
     lastInput: 'Brief de campaña de muebles ergonómicos',
     lastOutput: 'Entregado paquete de insights de competidores'
   },
@@ -94,6 +104,10 @@ export const INITIAL_AGENTS: Agent[] = [
     position: { x: 35, y: 25 },
     tasksCompleted: 38,
     currentTask: 'Definiendo 3 ángulos de prueba basados en pricing gaps',
+    taskQueue: [
+      { id: 's1', title: 'Definir ángulos de prueba basados en pricing gaps', status: 'in_progress', priority: 'High' },
+      { id: 's2', title: 'Review Q2 retrospective strategy', status: 'completed', priority: 'Medium' }
+    ],
     lastInput: 'Paquete de insights de Research Agent',
     lastOutput: 'Briefing enviado a Copy Agent'
   },
@@ -142,6 +156,11 @@ export const INITIAL_AGENTS: Agent[] = [
     position: { x: 55, y: 25 },
     tasksCompleted: 156,
     currentTask: 'Generando 5 variaciones de hook para TikTok',
+    taskQueue: [
+      { id: 'c1', title: 'Generar 5 variaciones de hook para TikTok', status: 'in_progress', priority: 'High' },
+      { id: 'c2', title: 'Body copy para Lead Gen campaña', status: 'pending', priority: 'Medium' },
+      { id: 'c3', title: 'Script UGC para Angle A', status: 'completed', priority: 'High' }
+    ],
     lastInput: 'Brief de Strategy Agent (3 Ángulos)',
     lastOutput: 'Set de copies enviado a Creative Direction'
   },
@@ -190,6 +209,10 @@ export const INITIAL_AGENTS: Agent[] = [
     position: { x: 75, y: 25 },
     tasksCompleted: 85,
     currentTask: 'Bocetando layouts para 3 ángulos de video',
+    taskQueue: [
+      { id: 'cd1', title: 'Bocetando layouts para 3 ángulos de video', status: 'in_progress', priority: 'High' },
+      { id: 'cd2', title: 'Aprobar paleta de color para campaña Q3', status: 'completed', priority: 'Medium' }
+    ],
     lastInput: 'Set de copies aprobados de Copy Agent',
     lastOutput: 'Brief visual entregado'
   },
@@ -238,6 +261,10 @@ export const INITIAL_AGENTS: Agent[] = [
     position: { x: 20, y: 65 },
     tasksCompleted: 29,
     currentTask: 'Definiendo reglas de escalado para ABO',
+    taskQueue: [
+      { id: 'mp1', title: 'Definir reglas de escalado para ABO', status: 'in_progress', priority: 'High' },
+      { id: 'mp2', title: 'Calcular blended ROAS target', status: 'completed', priority: 'Medium' }
+    ],
     lastInput: 'Brief visual de Creative Direction Agent',
     lastOutput: 'Plan de despliegue entregado'
   },
@@ -285,7 +312,10 @@ export const INITIAL_AGENTS: Agent[] = [
     health: 'Optimal',
     position: { x: 40, y: 65 },
     tasksCompleted: 245,
-    currentTask: undefined,
+    taskQueue: [
+      { id: 'a1', title: 'Detect fatigue on Ad Set B', status: 'completed', priority: 'High' },
+      { id: 'a2', title: 'Wait for Campaign Beta initial conversion window', status: 'pending', priority: 'Low' }
+    ],
     lastInput: 'Reporte de Meta Ads API',
     lastOutput: 'Alerta de fatiga en el anuncio principal'
   },
@@ -334,6 +364,10 @@ export const INITIAL_AGENTS: Agent[] = [
     position: { x: 80, y: 65 },
     tasksCompleted: 120,
     currentTask: 'Aprobando presupuesto Q3',
+    taskQueue: [
+      { id: 'm1', title: 'Aprobar presupuesto Q3', status: 'in_progress', priority: 'Critical' },
+      { id: 'm2', title: 'Validar concepto de Copy Agent', status: 'completed', priority: 'High' }
+    ],
     lastInput: 'Alerta de fatiga de Analytics',
     lastOutput: 'Redistribución de tareas hacia Copy Agent'
   },
@@ -382,20 +416,24 @@ export const INITIAL_AGENTS: Agent[] = [
     position: { x: 60, y: 65 },
     tasksCompleted: 890,
     currentTask: 'Consolidando reportes de Q2',
+    taskQueue: [
+      { id: 'op1', title: 'Consolidar reportes Q2 para CEO', status: 'in_progress', priority: 'High' },
+      { id: 'op2', title: 'Clear dead-letter queue (Webhook failure)', status: 'blocked', priority: 'Medium' }
+    ],
     lastInput: 'Flujo de handoffs del sistema',
     lastOutput: 'PDF Consolidado enviado a Manager'
   }
 ];
 
 export const INITIAL_LOGS: ActivityLog[] = [
-  { id: 'log-1', agentId: 'research-agent', agentName: 'Research Agent', message: 'Completado análisis de competidores para Q2.', timestamp: '12:05:22', type: 'success', objective: 'Buscar pricing gaps', result: 'Encontrado descuento 20% promedio' },
-  { id: 'log-2', agentId: 'strategy-agent', agentName: 'Strategy Agent', message: 'Formulando 3 hipótesis de prueba.', timestamp: '12:05:45', type: 'info', objective: 'Crear ángulos', result: '3 ángulos generados' },
-  { id: 'log-3', agentId: 'research-agent', agentName: 'Research Agent', message: 'Handoff a Strategy Agent exitoso.', timestamp: '12:05:50', type: 'handoff' },
-  { id: 'log-4', agentId: 'creative-direction-agent', agentName: 'Creative Direction Agent', message: 'Generados 3 conceptos visuales para Ángulo A.', timestamp: '12:06:01', type: 'success', objective: 'Emparejar hooks y visuales', result: 'Briefs listos' },
-  { id: 'log-5', agentId: 'automation-ops-agent', agentName: 'Automation / Ops Agent', message: 'Health check del sistema: 100% estable.', timestamp: '12:06:12', type: 'success' },
-  { id: 'log-6', agentId: 'copy-agent', agentName: 'Copy Agent', message: 'Redactando variaciones para el hook principal.', timestamp: '12:06:30', type: 'info' },
-  { id: 'log-7', agentId: 'analytics-agent', agentName: 'Analytics Agent', message: 'Detectado incremento de CPA en Campaña Beta.', timestamp: '12:06:40', type: 'warning' },
-  { id: 'log-8', agentId: 'media-planner-agent', agentName: 'Media Planner Agent', message: 'Optimizando presupuesto (CBO) para mitigar CPA.', timestamp: '12:06:45', type: 'info', objective: 'Bajar CPA', result: 'Cambio a CBO aplicado' },
+  { id: 'log-1', agentId: 'research-agent', agentName: 'Research Agent', message: '@strategy-agent He finalizado el barrido de competidores. El CPL promedio del sector subió 15%. Te envío el packet con 3 oportunidades clave basadas en bundle offers.', timestamp: '12:05:22', type: 'info', objective: 'Buscar pricing gaps', result: 'Encontrado descuento 20% promedio' },
+  { id: 'log-2', agentId: 'strategy-agent', agentName: 'Strategy Agent', message: 'Recibido. @copy-agent Estoy formulando 3 hipótesis de prueba. Voy a priorizar el ángulo "Convenience/Bundle". Prepara tus variantes.', timestamp: '12:05:45', type: 'info', objective: 'Crear ángulos', result: '3 ángulos generados' },
+  { id: 'log-3', agentId: 'research-agent', agentName: 'Research Agent', message: 'Handoff de Research Packet a Strategy completado. [Payload: 14KB JSON]', timestamp: '12:05:50', type: 'handoff' },
+  { id: 'log-4', agentId: 'creative-direction-agent', agentName: 'Creative Direction Agent', message: '@manager-agent He generado 3 conceptos visuales para el Ángulo A (Split-screen format). Listos para revisión antes del Media Plan.', timestamp: '12:06:01', type: 'success', objective: 'Emparejar hooks y visuales', result: 'Briefs listos' },
+  { id: 'log-5', agentId: 'automation-ops-agent', agentName: 'Automation / Ops Agent', message: '[System Auto-Log] Health check del pipeline de datos: 100% estable. No se detectan cuellos de botella en la cola de Copy Agent.', timestamp: '12:06:12', type: 'success' },
+  { id: 'log-6', agentId: 'copy-agent', agentName: 'Copy Agent', message: 'Drafting en progreso. Tengo 5 variaciones iniciales para el hook principal "The secret to focus". Lo subo al buffer compartido.', timestamp: '12:06:30', type: 'info' },
+  { id: 'log-7', agentId: 'analytics-agent', agentName: 'Analytics Agent', message: '⚠️ @planner-agent Detectado incremento de CPA (+20%) en Campaña Beta durante las últimas 4 horas. Sugiero pausar creativos C y D.', timestamp: '12:06:40', type: 'warning' },
+  { id: 'log-8', agentId: 'media-planner-agent', agentName: 'Media Planner Agent', message: '@analytics-agent Copiado. Optimizando presupuesto y migrando a CBO para mitigar la subida del CPA. @manager-agent requiero aprobación si el shift supera $5k.', timestamp: '12:06:45', type: 'info', objective: 'Bajar CPA', result: 'Cambio a CBO aplicado' },
 ];
 
 export const INITIAL_DELIVERABLES: Deliverable[] = [
@@ -447,7 +485,7 @@ export const INITIAL_HANDOFFS: Handoff[] = [
     fromId: 'research-agent',
     toId: 'strategy-agent',
     timestamp: '12:05:50',
-    payload: 'Competitor Pricing Insights Data Packet',
+    payload: '{\n  "status": "research_complete",\n  "market_trend": "high_cpl_shift",\n  "opportunities": ["bundle_offers", "ugc_focus"],\n  "confidence_score": 0.92\n}',
     status: 'received'
   },
   {
@@ -455,7 +493,41 @@ export const INITIAL_HANDOFFS: Handoff[] = [
     fromId: 'copy-agent',
     toId: 'creative-direction-agent',
     timestamp: '12:15:00',
-    payload: 'Approved Copy Hooks for Storyboarding',
+    payload: '{\n  "status": "copy_approved",\n  "angles": ["Pain Relief", "Productivity"],\n  "assets_required": 4,\n  "format": "TikTok_9_16"\n}',
     status: 'in_transit'
   }
 ];
+
+export const CEO_DATA: CeoModeData = {
+  executiveSummary: "La operación de la agencia está estable con un throughput del sistema al 94%. El costo por adquisición (CPA) de la Campaña Beta subió, pero el Media Planner Agent ya ejecutó una mitigación automática pasando la estructura a CBO. Se requieren decisiones sobre presupuesto de Q3 y revisión de fatiga de anuncios.",
+  topPriorities: [
+    "Aprobar presupuesto de Q3 (Manager Agent esperando)",
+    "Validar nuevos conceptos creativos de 'Design Fox'",
+    "Aumentar ROAS global un +15% esta semana"
+  ],
+  alerts: [
+    { id: 'al-1', message: "Fatiga creativa detectada en Ads de Retargeting", source: "Analytics Agent", type: "warning", timestamp: "Hace 10 min" },
+    { id: 'al-2', message: "Límite de facturación de Meta cercano (95%)", source: "Ops Agent", type: "error", timestamp: "Hace 22 min" },
+    { id: 'al-3', message: "Handoff Copy -> Creative completado a tiempo", source: "Manager Agent", type: "info", timestamp: "Hace 1h" }
+  ],
+  pendingDecisions: [
+    {
+      id: 'dec-1',
+      title: "Autorizar Shift de $5k a CBO",
+      description: "Media Planner propone mover $5,000 USD diarios a la nueva estructura CBO para mitigar la subida temporal de CPA detectada por Analytics.",
+      impact: "High (CPA Control)",
+      suggestedBy: "Media Planner Agent",
+      urgency: "High",
+      status: "Pending"
+    },
+    {
+      id: 'dec-2',
+      title: "Aprobar Producción de UGC Pack A",
+      description: "Creative Direction Agent finalizó los guiones. Requiere luz verde para enviar briefs a los creadores de contenido (Presupuesto: $1,200).",
+      impact: "Medium (New Creatives)",
+      suggestedBy: "Manager Agent",
+      urgency: "Normal",
+      status: "Pending"
+    }
+  ]
+};

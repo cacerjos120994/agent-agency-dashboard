@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ActivityLog, LogEventType } from '@/types';
 import { INITIAL_LOGS } from '@/data/mock-data';
@@ -27,7 +27,16 @@ const LOG_COLORS: Record<LogEventType, string> = {
 };
 
 export default function ActivityFeed() {
-  const [logs] = useState<ActivityLog[]>(INITIAL_LOGS);
+  const [logs] = React.useState<ActivityLog[]>(INITIAL_LOGS);
+
+  const formatMessage = (msg: string) => {
+    return msg.split(' ').map((word, i) => {
+      if (word.startsWith('@')) {
+        return <span key={i} className="text-blue-400 font-bold bg-blue-500/10 px-1 rounded-sm border border-blue-500/20">{word}</span>;
+      }
+      return word + ' ';
+    });
+  };
 
   return (
     <div className="bg-slate-900 border border-slate-800 rounded-xl flex flex-col h-full overflow-hidden shadow-xl">
@@ -62,7 +71,7 @@ export default function ActivityFeed() {
                      <span className="opacity-50 text-[10px] tabular-nums tracking-tighter bg-slate-950 px-1.5 rounded">{log.timestamp}</span>
                   </div>
                   <div className="text-slate-300 leading-relaxed font-sans text-xs border-l-2 border-current pl-2 py-0.5">
-                    {log.message}
+                    {formatMessage(log.message)}
                   </div>
                   
                   {/* Rich Metadata Section */}

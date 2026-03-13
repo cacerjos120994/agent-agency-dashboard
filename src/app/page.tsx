@@ -1,13 +1,23 @@
+"use client";
+
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import OfficeView from "@/components/dashboard/OfficeView";
 import StatsHeader from "@/components/dashboard/StatsHeader";
 import ActivityFeed from "@/components/dashboard/ActivityFeed";
 import DeliverablesPanel from "@/components/dashboard/DeliverablesPanel";
-import ExecutiveSummary from "@/components/dashboard/ExecutiveSummary";
+import CeoMode from "@/components/dashboard/CeoMode";
 import { Cpu, LayoutDashboard, Settings, Box, Terminal, Activity, Eye, Zap } from "lucide-react";
 
 export default function Home() {
+  const [isCeoMode, setIsCeoMode] = useState(false);
+
   return (
-    <div className="flex h-screen bg-[#020617] text-slate-200 overflow-hidden font-sans selection:bg-orange-500/30 selection:text-orange-200">
+    <div className="flex h-screen bg-[#020617] text-slate-200 overflow-hidden font-sans selection:bg-orange-500/30 selection:text-orange-200 relative">
+      <AnimatePresence>
+        {isCeoMode && <CeoMode onClose={() => setIsCeoMode(false)} />}
+      </AnimatePresence>
+
       {/* Sidebar Navigation */}
       <aside className="w-20 flex flex-col items-center py-6 border-r border-slate-800 bg-slate-950/80 backdrop-blur-xl z-50 shrink-0">
         <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-700 rounded-xl flex items-center justify-center mb-10 shadow-[0_0_20px_rgba(234,88,12,0.4)] border border-orange-400/30 cursor-pointer hover:scale-105 transition-transform">
@@ -51,7 +61,10 @@ export default function Home() {
           
           <div className="flex items-center gap-6">
              <div className="flex gap-4 mr-4">
-                <button className="flex items-center gap-2 text-[10px] uppercase font-bold tracking-widest text-slate-400 hover:text-white transition-colors">
+                <button 
+                  onClick={() => setIsCeoMode(true)}
+                  className="flex items-center gap-2 text-[10px] uppercase font-bold tracking-widest text-slate-400 hover:text-white transition-colors bg-slate-800/50 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-700"
+                >
                   <Eye className="w-3.5 h-3.5" /> CEO View
                 </button>
              </div>
@@ -92,7 +105,25 @@ export default function Home() {
             </div>
           </div>
 
-          <ExecutiveSummary />
+          <div className="mt-8">
+             <button 
+                onClick={() => setIsCeoMode(true)}
+                className="w-full bg-slate-900 border border-slate-800 hover:border-slate-700 hover:bg-slate-800/80 transition-all p-6 rounded-xl flex items-center justify-between group cursor-pointer"
+             >
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-indigo-500/10 border border-indigo-500/20 rounded-full flex items-center justify-center text-indigo-400">
+                    <Eye className="w-5 h-5" />
+                  </div>
+                  <div className="text-left">
+                     <h3 className="text-sm font-bold uppercase tracking-widest text-white group-hover:text-indigo-400 transition-colors">Enter CEO Mode</h3>
+                     <p className="text-xs text-slate-500 mt-1">Review executive summary, manage priorities, and approve pending decisions.</p>
+                  </div>
+                </div>
+                <div className="text-slate-600 group-hover:text-indigo-400 transition-colors">
+                  <Zap className="w-5 h-5" />
+                </div>
+             </button>
+          </div>
         </div>
       </main>
     </div>
