@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Agent, AgentStatus, Handoff } from '@/types';
 import { INITIAL_AGENTS, INITIAL_HANDOFFS } from '@/data/mock-data';
-import { Network, AlertCircle, CheckCircle2, Zap, Info, Fingerprint, BookOpen, Wrench, ShieldCheck, HardDrive } from 'lucide-react';
+import { Network, AlertCircle, CheckCircle2, Zap, Info, Fingerprint, BookOpen, Wrench, ShieldCheck, HardDrive, Cpu } from 'lucide-react';
 
 const STATUS_COLORS: Record<AgentStatus, string> = {
   Idle: 'bg-slate-500',
@@ -16,6 +16,7 @@ const STATUS_COLORS: Record<AgentStatus, string> = {
   Reporting: 'bg-cyan-500',
   Blocked: 'bg-red-500',
   Delivering: 'bg-indigo-500',
+  Active: 'bg-orange-500'
 };
 
 const PixelAgent = ({ agent, onClick, isSelected }: { agent: Agent, onClick: () => void, isSelected: boolean }) => {
@@ -98,7 +99,7 @@ const PixelAgent = ({ agent, onClick, isSelected }: { agent: Agent, onClick: () 
         
         <div className={`absolute -bottom-8 px-2.5 py-1 rounded border shadow-lg whitespace-nowrap z-30 transition-all ${isSelected ? 'bg-orange-500/20 border-orange-500 text-orange-100' : 'bg-slate-900/80 border-slate-700/80 text-slate-300 group-hover:bg-slate-800 group-hover:border-slate-500'}`}>
           <div className="text-[10px] font-bold tracking-wider uppercase flex items-center gap-1.5">
-             {agent.name}
+             {agent.displayName}
              <span className={`w-1.5 h-1.5 rounded-full ${STATUS_COLORS[agent.status]}`} />
           </div>
         </div>
@@ -151,8 +152,8 @@ const HandoffLines = ({ agents, handoffs }: { agents: Agent[], handoffs: Handoff
 };
 
 export default function OfficeView() {
-  const [agents, setAgents] = useState<Agent[]>(INITIAL_AGENTS);
-  const [handoffs, setHandoffs] = useState<Handoff[]>(INITIAL_HANDOFFS);
+  const [agents] = useState<Agent[]>(INITIAL_AGENTS);
+  const [handoffs] = useState<Handoff[]>(INITIAL_HANDOFFS);
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'identity' | 'sops' | 'tools'>('overview');
 
@@ -171,7 +172,7 @@ export default function OfficeView() {
       />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(2,6,23,0.9)_100%)] pointer-events-none" />
 
-      {/* Decorative Zones for 8 Agents */}
+      {/* Decorative Zones for Agents */}
       <div className="absolute top-[15%] left-[5%] w-[40%] h-[35%] border border-blue-500/10 bg-blue-500/5 rounded-lg pointer-events-none flex items-start p-2"><span className="text-[10px] uppercase text-blue-500/30 font-mono">Intel & Strategy Dept</span></div>
       <div className="absolute top-[15%] right-[5%] w-[40%] h-[35%] border border-emerald-500/10 bg-emerald-500/5 rounded-lg pointer-events-none flex items-start p-2"><span className="text-[10px] uppercase text-emerald-500/30 font-mono">Creative Dept</span></div>
       <div className="absolute bottom-[15%] left-[20%] w-[60%] h-[35%] border border-purple-500/10 bg-purple-500/5 rounded-lg pointer-events-none flex items-start p-2"><span className="text-[10px] uppercase text-purple-500/30 font-mono">Operations & Media Dept</span></div>
@@ -204,9 +205,9 @@ export default function OfficeView() {
                      <span className="text-2xl">🦊</span>
                    </div>
                    <div>
-                     <h3 className="text-xl font-bold text-white tracking-tight">{selectedAgent.name}</h3>
+                     <h3 className="text-xl font-bold text-white tracking-tight">{selectedAgent.displayName}</h3>
                      <div className="flex items-center gap-2 mt-1">
-                        <span className="text-[10px] uppercase font-mono bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">{selectedAgent.role}</span>
+                        <span className="text-[10px] uppercase font-mono bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">{selectedAgent.department}</span>
                         <div className="flex items-center gap-1.5">
                           <span className={`w-2 h-2 rounded-full ${STATUS_COLORS[selectedAgent.status]}`} />
                           <span className="text-xs text-slate-400 font-medium">{selectedAgent.status}</span>
@@ -218,17 +219,17 @@ export default function OfficeView() {
                </div>
 
                {/* Tabs */}
-               <div className="flex gap-1 border-b border-slate-800 mt-6">
+               <div className="flex gap-1 border-b border-slate-800 mt-6 overflow-x-auto scrollbar-hide">
                  {[
                    { id: 'overview', icon: Zap, label: 'Ops' },
                    { id: 'identity', icon: Fingerprint, label: 'Identity' },
                    { id: 'sops', icon: BookOpen, label: 'SOPs' },
-                   { id: 'tools', icon: Wrench, label: 'Sys' }
+                   { id: 'tools', icon: Wrench, label: 'Sys/Tools' }
                  ].map(tab => (
                    <button 
                      key={tab.id}
                      onClick={() => setActiveTab(tab.id as any)}
-                     className={`flex items-center gap-1.5 px-4 py-2 text-[10px] font-bold uppercase tracking-wider transition-colors border-b-2 ${activeTab === tab.id ? 'text-blue-400 border-blue-500 bg-blue-500/5' : 'text-slate-500 border-transparent hover:text-slate-300'}`}
+                     className={`flex items-center gap-1.5 px-4 py-2 text-[10px] font-bold uppercase tracking-wider transition-colors border-b-2 whitespace-nowrap ${activeTab === tab.id ? 'text-blue-400 border-blue-500 bg-blue-500/5' : 'text-slate-500 border-transparent hover:text-slate-300'}`}
                    >
                      <tab.icon className="w-3.5 h-3.5" /> {tab.label}
                    </button>
@@ -242,9 +243,6 @@ export default function OfficeView() {
               {/* --- OVERVIEW TAB --- */}
               {activeTab === 'overview' && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-                  <p className="text-sm text-slate-400 leading-relaxed border-l-2 border-slate-700 pl-3">
-                    {selectedAgent.description}
-                  </p>
                   <div className="grid grid-cols-2 gap-3">
                     <div className="bg-slate-950/50 p-3 rounded-lg border border-slate-800/50">
                       <div className="text-[10px] text-slate-500 font-mono mb-1 uppercase">Efficiency</div>
@@ -260,7 +258,7 @@ export default function OfficeView() {
                       <div className="absolute top-0 left-0 w-1 h-full bg-blue-500" />
                       <div className="flex items-center gap-2 mb-2 text-blue-400">
                         <Zap className="w-4 h-4" />
-                        <span className="text-xs font-bold uppercase tracking-wider">Live Operation</span>
+                        <span className="text-xs font-bold uppercase tracking-wider">Live Task</span>
                       </div>
                       <div className="font-mono text-xs text-slate-200">
                         {selectedAgent.currentTask}
@@ -275,12 +273,12 @@ export default function OfficeView() {
                     <div className="relative border-l border-slate-800 ml-2 pl-4 py-2 space-y-4">
                        <div className="relative">
                          <div className="absolute -left-[21px] top-1.5 w-2 h-2 rounded-full bg-slate-600 border border-slate-900" />
-                         <div className="text-[10px] text-slate-500 uppercase">Input from: {selectedAgent.identity.reportsTo}</div>
+                         <div className="text-[10px] text-slate-500 uppercase">Input Recibido</div>
                          <div className="text-xs text-slate-300 mt-0.5">{selectedAgent.lastInput || 'Awaiting initial prompt'}</div>
                        </div>
                        <div className="relative">
                          <div className="absolute -left-[21px] top-1.5 w-2 h-2 rounded-full bg-blue-500 border border-slate-900 shadow-[0_0_8px_rgba(59,130,246,0.6)]" />
-                         <div className="text-[10px] text-blue-400 uppercase">Output to: {selectedAgent.nextRecipient}</div>
+                         <div className="text-[10px] text-blue-400 uppercase">Output Entregado a: {selectedAgent.handoffRules.primaryReceiver}</div>
                          <div className="text-xs text-slate-300 mt-0.5">{selectedAgent.lastOutput || 'Processing...'}</div>
                        </div>
                     </div>
@@ -292,61 +290,71 @@ export default function OfficeView() {
               {activeTab === 'identity' && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
                   <section>
-                     <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold">Primary Mission</h4>
-                     <p className="text-sm text-slate-200 bg-slate-800/30 p-3 rounded border border-slate-700/50">{selectedAgent.identity.mission}</p>
+                     <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold">Misión</h4>
+                     <p className="text-sm text-slate-200 bg-slate-800/30 p-3 rounded border border-slate-700/50">{selectedAgent.mission}</p>
                   </section>
                   <div className="grid grid-cols-2 gap-4">
                      <div>
-                       <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold">Reports To</h4>
-                       <div className="text-xs text-slate-300 font-mono">{selectedAgent.identity.reportsTo}</div>
+                       <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold">Reporta a</h4>
+                       <div className="text-xs text-slate-300 font-mono">{selectedAgent.reportsTo}</div>
                      </div>
                      <div>
                        <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold">Work Style</h4>
-                       <div className="text-xs text-slate-300">{selectedAgent.identity.workStyle}</div>
+                       <div className="flex flex-wrap gap-1">
+                         {selectedAgent.workStyle.map(style => <span key={style} className="text-[10px] bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded border border-slate-700">{style}</span>)}
+                       </div>
                      </div>
                   </div>
                   <section>
-                     <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold">Conduct Principles</h4>
+                     <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold">Principios de Conducta</h4>
                      <ul className="space-y-2">
-                       {selectedAgent.conduct.principles.map((p, i) => (
-                         <li key={i} className="text-xs text-emerald-400 flex gap-2"><CheckCircle2 className="w-3.5 h-3.5 shrink-0" /> {p}</li>
+                       {selectedAgent.corePrinciples.map((p, i) => (
+                         <li key={i} className="text-xs text-emerald-400 flex gap-2 items-start"><CheckCircle2 className="w-3.5 h-3.5 shrink-0 mt-0.5" /> <span>{p}</span></li>
                        ))}
                      </ul>
                   </section>
                   <section>
-                     <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold">Anti-Patterns (Forbidden)</h4>
+                     <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold">Anti-Patrones (Never Do)</h4>
                      <ul className="space-y-2">
-                       {selectedAgent.identity.antiPatterns.map((p, i) => (
-                         <li key={i} className="text-xs text-red-400 flex gap-2"><AlertCircle className="w-3.5 h-3.5 shrink-0" /> {p}</li>
+                       {selectedAgent.neverDo.map((p, i) => (
+                         <li key={i} className="text-xs text-red-400 flex gap-2 items-start"><AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" /> <span>{p}</span></li>
                        ))}
                      </ul>
                   </section>
                 </motion.div>
               )}
 
-              {/* --- SOPs TAB --- */}
+              {/* --- SOPs & WORKFLOW TAB --- */}
               {activeTab === 'sops' && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-                  <div className="bg-blue-500/10 border border-blue-500/20 rounded p-3 text-xs text-blue-300 mb-4">
-                    Strict adherence to Standard Operating Procedures is enforced.
-                  </div>
-                  {selectedAgent.skills.sops.map((sop, i) => (
-                    <section key={i} className="bg-slate-800/20 border border-slate-700/50 rounded-lg p-4">
-                       <h4 className="text-sm font-bold text-white mb-1">{sop.name}</h4>
-                       <p className="text-[10px] uppercase tracking-wider text-slate-500 mb-3">{sop.description}</p>
-                       <div className="space-y-2 relative border-l border-slate-700 ml-1.5 pl-4">
-                         {sop.steps.map((step, idx) => (
+                  <section>
+                     <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold flex items-center gap-2"><BookOpen className="w-3 h-3" /> Mandatory Workflow</h4>
+                     <div className="bg-slate-800/20 border border-slate-700/50 rounded-lg p-4">
+                       <div className="space-y-3 relative border-l border-slate-700 ml-1.5 pl-4">
+                         {selectedAgent.mandatoryWorkflow.map((step, idx) => (
                            <div key={idx} className="relative text-xs text-slate-300">
-                             <div className="absolute -left-[21px] top-1.5 w-1.5 h-1.5 rounded-full bg-slate-500" />
+                             <div className="absolute -left-[21px] top-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_5px_rgba(59,130,246,0.8)]" />
                              {step}
                            </div>
                          ))}
                        </div>
-                    </section>
-                  ))}
+                     </div>
+                  </section>
                   <section>
-                     <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold">Escalation Rule</h4>
-                     <p className="text-xs text-amber-400 bg-amber-500/10 p-3 rounded border border-amber-500/20">{selectedAgent.conduct.escalationRules}</p>
+                     <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold">Validation Checklist</h4>
+                     <ul className="space-y-2">
+                       {selectedAgent.validationChecklist.map((c, i) => (
+                         <li key={i} className="text-xs text-slate-300 flex gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-slate-500 shrink-0" /> {c}</li>
+                       ))}
+                     </ul>
+                  </section>
+                  <section>
+                     <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold">Escalation Rules</h4>
+                     <ul className="space-y-2">
+                       {selectedAgent.escalationRules.map((rule, i) => (
+                         <li key={i} className="text-xs text-amber-400 bg-amber-500/10 p-2 rounded border border-amber-500/20">{rule}</li>
+                       ))}
+                     </ul>
                   </section>
                 </motion.div>
               )}
@@ -355,38 +363,33 @@ export default function OfficeView() {
               {activeTab === 'tools' && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
                   <section>
-                     <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold flex items-center gap-2"><Wrench className="w-3 h-3" /> Native Capabilities</h4>
+                     <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold flex items-center gap-2"><Wrench className="w-3 h-3" /> Private Tools</h4>
                      <div className="flex flex-wrap gap-2">
-                       {selectedAgent.tools.native.map((t, i) => (
-                         <span key={i} className="px-2 py-1 text-[10px] font-mono bg-slate-800 border border-slate-700 rounded text-slate-300">{t}</span>
+                       {selectedAgent.privateTools.map((t, i) => (
+                         <span key={i} className="px-2 py-1 text-[10px] font-mono bg-slate-800 border border-slate-700 rounded text-slate-300 flex items-center gap-1"><Cpu className="w-3 h-3 text-blue-400" /> {t}</span>
                        ))}
                      </div>
                   </section>
                   <section>
-                     <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold flex items-center gap-2"><HardDrive className="w-3 h-3" /> Memory Architecture</h4>
-                     <div className="bg-slate-900 border border-slate-800 p-3 rounded-lg space-y-2">
-                       <div className="flex justify-between text-xs">
-                         <span className="text-slate-500">Local Cache</span>
-                         <span className="text-slate-300 font-mono">{selectedAgent.memory.localCapacity}</span>
+                     <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold flex items-center gap-2"><HardDrive className="w-3 h-3" /> Memory Usage Layers</h4>
+                     <div className="bg-slate-900 border border-slate-800 rounded-lg overflow-hidden divide-y divide-slate-800 text-xs">
+                       <div className="p-3">
+                         <span className="text-slate-500 uppercase tracking-widest text-[9px] block mb-1">Local Memory</span>
+                         <div className="text-slate-300">{selectedAgent.localMemory.join(' • ')}</div>
                        </div>
-                       <div className="flex justify-between text-xs">
-                         <span className="text-slate-500">Insights Stored</span>
-                         <span className="text-slate-300 font-mono">{selectedAgent.memory.totalInsightsStored}</span>
+                       <div className="p-3">
+                         <span className="text-slate-500 uppercase tracking-widest text-[9px] block mb-1">Shared Memory</span>
+                         <div className="text-slate-300">{selectedAgent.sharedMemoryUsage.join(' • ')}</div>
                        </div>
                      </div>
                   </section>
                   <section>
-                     <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold flex items-center gap-2"><ShieldCheck className="w-3 h-3" /> Maintenance & QA</h4>
-                     <div className="bg-slate-900 border border-slate-800 p-3 rounded-lg space-y-3">
-                       <div>
-                         <div className="text-[10px] text-slate-500 uppercase mb-1">Self-Check Protocol</div>
-                         <div className="text-xs text-emerald-400">{selectedAgent.maintenance.selfCheckInterval}</div>
-                       </div>
-                       <div>
-                         <div className="text-[10px] text-slate-500 uppercase mb-1">Recovery Logic</div>
-                         <div className="text-xs text-blue-400 bg-blue-500/10 p-2 rounded">{selectedAgent.maintenance.recoveryProtocol}</div>
-                       </div>
-                     </div>
+                     <h4 className="text-[10px] uppercase tracking-wider text-slate-500 mb-2 font-bold flex items-center gap-2"><ShieldCheck className="w-3 h-3" /> Quality Control Protocol</h4>
+                     <ul className="space-y-2">
+                       {selectedAgent.maintenance.qualityControl.map((qc, i) => (
+                         <li key={i} className="text-xs text-emerald-400 bg-emerald-500/10 p-2 rounded border border-emerald-500/20 flex gap-2"><CheckCircle2 className="w-3 h-3 shrink-0" /> {qc}</li>
+                       ))}
+                     </ul>
                   </section>
                 </motion.div>
               )}
@@ -399,7 +402,7 @@ export default function OfficeView() {
                  {selectedAgent.health === 'Optimal' ? <CheckCircle2 className="w-4 h-4 text-emerald-500" /> : <AlertCircle className="w-4 h-4 text-amber-500" />}
                  <span className="text-[10px] font-mono text-slate-400 uppercase">Sys. Health: {selectedAgent.health}</span>
                </div>
-               <div className="text-[10px] font-mono text-slate-500 bg-slate-900 px-2 py-1 rounded">QA Score: <span className="text-emerald-400 font-bold">{selectedAgent.maintenance.qaScore}/100</span></div>
+               <div className="text-[10px] font-mono text-slate-500 bg-slate-900 px-2 py-1 rounded">Visual Zone: <span className="text-slate-300">{selectedAgent.dashboardVisualization.zone}</span></div>
             </div>
           </motion.div>
         )}

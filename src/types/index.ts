@@ -1,13 +1,3 @@
-export type AgentRole = 
-  | 'Research' 
-  | 'Ads Strategist' 
-  | 'Creative Copy' 
-  | 'Creative Direction' 
-  | 'Media Planner' 
-  | 'Analytics' 
-  | 'Automation' 
-  | 'Manager';
-
 export type AgentStatus = 
   | 'Idle' 
   | 'Researching' 
@@ -17,7 +7,8 @@ export type AgentStatus =
   | 'Planning' 
   | 'Reporting' 
   | 'Blocked' 
-  | 'Delivering';
+  | 'Delivering'
+  | 'Active';
 
 export type TaskPriority = 'Low' | 'Medium' | 'High' | 'Critical';
 
@@ -28,81 +19,70 @@ export interface AgentTask {
   priority: TaskPriority;
 }
 
-export interface AgentIdentity {
+export interface Agent {
+  // Core Identity
+  id: string;
+  displayName: string;
+  department: string;
   mission: string;
   reportsTo: string;
   collaboratesWith: string[];
-  workStyle: string;
-  antiPatterns: string[];
-}
+  workStyle: string[];
+  neverDo: string[];
+  corePrinciples: string[];
 
-export interface AgentConduct {
-  principles: string[];
-  inputFormat: string;
-  outputFormat: string;
+  // Conduct & Workflow
+  inputFormat: string[];
+  outputFormat: string[];
   restrictions: string[];
-  mandatorySteps: string[];
-  escalationRules: string;
-}
+  mandatoryWorkflow: string[];
+  escalationRules: string[];
+  validationChecklist: string[];
 
-export interface AgentTools {
-  native: string[];
-  shared: string[];
-  allowedActions: string[];
-}
+  // Tools & Memory
+  privateTools: string[];
+  sharedTools: string[];
+  localMemory: string[];
+  sharedMemoryUsage: string[];
+  insightsStoreUsage: string[];
+  taskHistoryUsage: string[];
 
-export interface AgentMemory {
-  localCapacity: string;
-  sharedContexts: string[];
-  totalInsightsStored: number;
-}
+  // Skills & SOPs
+  skills: string[];
+  maintenance: {
+    selfCheck: string[];
+    errorRecovery: string[];
+    qualityControl: string[];
+    stopConditions: string[];
+  };
 
-export interface AgentSkills {
-  sops: Array<{ name: string; description: string; steps: string[] }>;
-}
+  // Architecture & Handoffs
+  dashboardVisualization: {
+    zone: string;
+    statusLabels: string[];
+    deliverablesShown: string[];
+  };
+  handoffRules: {
+    primaryReceiver: string;
+    secondaryReceivers: string[];
+    payloadMustInclude: string[];
+  };
 
-export interface AgentMaintenance {
-  selfCheckInterval: string;
-  recoveryProtocol: string;
-  qaScore: number;
-}
-
-export interface Agent {
-  id: string;
-  name: string;
-  role: AgentRole;
+  // Live Operational State (for Dashboard UI)
   status: AgentStatus;
-  specialty: string;
-  description: string;
-  
-  // New Rich Architecture Elements
-  identity: AgentIdentity;
-  conduct: AgentConduct;
-  tools: AgentTools;
-  memory: AgentMemory;
-  skills: AgentSkills;
-  maintenance: AgentMaintenance;
-
+  efficiency: number;
+  health: 'Optimal' | 'Degraded' | 'Down';
+  position: { x: number; y: number };
   tasksCompleted: number;
   currentTask?: string;
-  taskQueue: AgentTask[];
   lastInput?: string;
   lastOutput?: string;
-  previousHandoff?: string;
-  nextRecipient?: string;
-  efficiency: number; // 0-100
-  uptimeMinutes: number;
-  health: 'Optimal' | 'Degraded' | 'Down';
-  recentInsights: string[];
-  position: { x: number; y: number }; // Percentage for pixel art grid
 }
 
 export interface Handoff {
   id: string;
   fromId: string;
   toId: string;
-  fromRole: AgentRole;
-  toRole: AgentRole;
   timestamp: string;
   payload: string;
   status: 'pending' | 'in_transit' | 'received';
