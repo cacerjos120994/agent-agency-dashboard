@@ -27,27 +27,28 @@ class OpenClawClient {
   public onConnectionChange: (connected: boolean) => void = () => {}
 
   constructor() {
-    // Default OpenClaw local gateway port
-    this.url = 'ws://127.0.0.1:18789/'
+    // Try to auto-detect hostname or fallback to localhost
+    const host = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
+    this.url = `ws://${host}:18789/`;
+    console.log(`[OpenClaw] Initializing WS client with target: ${this.url}`);
   }
 
   connect() {
     if (this.ws && (this.ws.readyState === WebSocket.CONNECTING || this.ws.readyState === WebSocket.OPEN)) {
-      return
+      return;
     }
 
     try {
-      this.ws = new WebSocket(this.url)
+      console.log(`[OpenClaw] Attempting connection to ${this.url}...`);
+      this.ws = new WebSocket(this.url);
       
       this.ws.onopen = () => {
-        console.log('[OpenClaw] Connected to Gateway')
-        this.connected = true
-        this.onConnectionChange(true)
-        if (this.reconnectTimer) clearTimeout(this.reconnectTimer)
-        
-        // Request initial state if needed
-        this.request('sessions.list', {})
-      }
+        console.log('[OpenClaw] Connection established successfully.');
+        this.connected = true;
+        this.onConnectionChange(true);
+        if (this.reconnectTimer) clearTimeout(this.reconnectTimer);
+        this.request('sessions.list', {}).catch(() => {});
+      };
 
       this.ws.onmessage = (msg) => {
         try {

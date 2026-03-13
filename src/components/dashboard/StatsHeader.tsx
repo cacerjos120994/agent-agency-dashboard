@@ -34,7 +34,7 @@ export default function StatsHeader() {
   const totalEfficiency = Math.round(INITIAL_AGENTS.reduce((acc, a) => acc + a.efficiency, 0) / INITIAL_AGENTS.length);
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
       <MetricCard 
         title="Mission Ops Score" 
         value={totalEfficiency} 

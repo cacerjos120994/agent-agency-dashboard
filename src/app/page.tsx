@@ -35,7 +35,7 @@ export default function Home() {
             <Terminal className="w-5 h-5 group-hover:scale-110 transition-transform" />
           </button>
           <div className="h-px w-8 bg-slate-800 mx-auto my-2" />
-          <button className="flex items-center justify-center p-3 rounded-xl text-slate-500 hover:text-slate-200 hover:bg-slate-800 transition-all group mt-auto">
+          <button className="flex items-center justify-center p-3 rounded-xl text-slate-500 hover:text-slate-200 hover:bg-slate-800 transition-all group mt-auto mb-4">
             <Settings className="w-5 h-5 group-hover:scale-110 transition-transform" />
           </button>
         </nav>
@@ -108,19 +108,20 @@ export default function Home() {
           <div className="mt-8">
              <button 
                 onClick={() => setIsCeoMode(true)}
-                className="w-full bg-slate-900 border border-slate-800 hover:border-slate-700 hover:bg-slate-800/80 transition-all p-6 rounded-xl flex items-center justify-between group cursor-pointer"
+                className="w-full bg-slate-900 border border-slate-800 hover:border-indigo-500/50 hover:bg-slate-800/80 transition-all p-6 rounded-xl flex items-center justify-between group cursor-pointer shadow-lg hover:shadow-indigo-500/10"
              >
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-indigo-500/10 border border-indigo-500/20 rounded-full flex items-center justify-center text-indigo-400">
-                    <Eye className="w-5 h-5" />
+                <div className="flex items-center gap-6">
+                  <div className="w-12 h-12 bg-indigo-500/10 border border-indigo-500/20 rounded-xl flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform">
+                    <Eye className="w-6 h-6" />
                   </div>
                   <div className="text-left">
-                     <h3 className="text-sm font-bold uppercase tracking-widest text-white group-hover:text-indigo-400 transition-colors">Enter CEO Mode</h3>
-                     <p className="text-xs text-slate-500 mt-1">Review executive summary, manage priorities, and approve pending decisions.</p>
+                     <h3 className="text-base font-bold uppercase tracking-[0.2em] text-white group-hover:text-indigo-400 transition-colors">Strategic CEO Terminal</h3>
+                     <p className="text-xs text-slate-500 mt-1 font-medium">Access executive intelligence, approve multi-agent handoffs, and monitor system-wide throughput.</p>
                   </div>
                 </div>
-                <div className="text-slate-600 group-hover:text-indigo-400 transition-colors">
-                  <Zap className="w-5 h-5" />
+                <div className="flex items-center gap-3 text-slate-600 group-hover:text-indigo-400 transition-colors">
+                  <span className="text-[10px] font-bold uppercase tracking-widest hidden md:block">Initialize Mode</span>
+                  <Zap className="w-5 h-5 animate-pulse" />
                 </div>
              </button>
           </div>

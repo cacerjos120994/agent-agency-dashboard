@@ -44,7 +44,7 @@ export const INITIAL_AGENTS: Agent[] = [
     status: 'Idle',
     efficiency: 94,
     health: 'Optimal',
-    position: { x: 15, y: 25 },
+    position: { x: 12, y: 35 },
     tasksCompleted: 42,
     taskQueue: [
       { id: 'r1', title: 'Compile Top 10 competitor offers', status: 'completed', priority: 'Medium' },
@@ -101,7 +101,7 @@ export const INITIAL_AGENTS: Agent[] = [
     status: 'Analyzing',
     efficiency: 91,
     health: 'Optimal',
-    position: { x: 35, y: 25 },
+    position: { x: 35, y: 35 },
     tasksCompleted: 38,
     currentTask: 'Definiendo 3 ángulos de prueba basados en pricing gaps',
     taskQueue: [
@@ -153,7 +153,7 @@ export const INITIAL_AGENTS: Agent[] = [
     status: 'Writing',
     efficiency: 98,
     health: 'Optimal',
-    position: { x: 55, y: 25 },
+    position: { x: 58, y: 35 },
     tasksCompleted: 156,
     currentTask: 'Generando 5 variaciones de hook para TikTok',
     taskQueue: [
@@ -206,7 +206,7 @@ export const INITIAL_AGENTS: Agent[] = [
     status: 'Designing',
     efficiency: 92,
     health: 'Optimal',
-    position: { x: 75, y: 25 },
+    position: { x: 82, y: 35 },
     tasksCompleted: 85,
     currentTask: 'Bocetando layouts para 3 ángulos de video',
     taskQueue: [
@@ -258,7 +258,7 @@ export const INITIAL_AGENTS: Agent[] = [
     status: 'Planning',
     efficiency: 89,
     health: 'Optimal',
-    position: { x: 20, y: 65 },
+    position: { x: 15, y: 75 },
     tasksCompleted: 29,
     currentTask: 'Definiendo reglas de escalado para ABO',
     taskQueue: [
@@ -310,7 +310,7 @@ export const INITIAL_AGENTS: Agent[] = [
     status: 'Idle',
     efficiency: 96,
     health: 'Optimal',
-    position: { x: 40, y: 65 },
+    position: { x: 38, y: 75 },
     tasksCompleted: 245,
     taskQueue: [
       { id: 'a1', title: 'Detect fatigue on Ad Set B', status: 'completed', priority: 'High' },
@@ -361,7 +361,7 @@ export const INITIAL_AGENTS: Agent[] = [
     status: 'Active',
     efficiency: 95,
     health: 'Optimal',
-    position: { x: 80, y: 65 },
+    position: { x: 60, y: 75 },
     tasksCompleted: 120,
     currentTask: 'Aprobando presupuesto Q3',
     taskQueue: [
@@ -413,7 +413,7 @@ export const INITIAL_AGENTS: Agent[] = [
     status: 'Active',
     efficiency: 99,
     health: 'Optimal',
-    position: { x: 60, y: 65 },
+    position: { x: 85, y: 75 },
     tasksCompleted: 890,
     currentTask: 'Consolidando reportes de Q2',
     taskQueue: [

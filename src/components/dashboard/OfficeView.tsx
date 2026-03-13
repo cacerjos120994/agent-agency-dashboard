@@ -45,7 +45,7 @@ const PixelAgent = ({ agent, onClick, isSelected }: { agent: Agent, onClick: () 
       className="absolute cursor-pointer group"
       onClick={onClick}
     >
-      <div className="relative w-16 h-16 flex flex-col items-center justify-center transform scale-75 origin-bottom">
+      <div className="relative w-16 h-16 flex flex-col items-center justify-center transform scale-60 origin-bottom">
         <motion.div 
           animate={{ 
             opacity: agent.status !== 'Idle' ? [0.4, 0.8, 0.4] : 0.2,
@@ -56,10 +56,10 @@ const PixelAgent = ({ agent, onClick, isSelected }: { agent: Agent, onClick: () 
             ] : "none"
           }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute w-10 h-7 bg-slate-900 border-2 border-slate-700 rounded-sm -mt-4 z-10 shadow-[inset_0_0_8px_rgba(0,0,0,0.8)]"
+          className="absolute w-10 h-7 bg-slate-950/80 border border-slate-700 rounded-sm -mt-4 z-10 shadow-[inset_0_0_8px_rgba(0,0,0,0.8)]"
         />
         
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mt-3 w-14 h-6 bg-slate-800 border-t border-slate-600 rounded-sm shadow-xl z-0 transform perspective-[200px] rotateX-12" />
+        {/* Removed redundant CSS Desk Table to show background image desks */}
         
         <motion.div 
            whileHover={{ y: -2 }}
@@ -175,31 +175,43 @@ export default function OfficeView() {
 
   return (
     <div className="relative w-full h-full min-h-[650px] bg-slate-950 border border-slate-800 rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-      <div className="absolute inset-0 bg-slate-900 z-0 pointer-events-none" />
-      <div className="absolute inset-0 pointer-events-none opacity-40 mix-blend-screen z-0" 
+      <div className="absolute inset-0 bg-[#0a0f1d] z-0 pointer-events-none" />
+      <div className="absolute inset-0 pointer-events-none opacity-60 z-0" 
            style={{ 
              backgroundImage: "url('/agent-agency-dashboard/office-bg.png')", 
-             backgroundSize: 'cover',
+             backgroundSize: '100% 100%',
              backgroundPosition: 'center',
              backgroundRepeat: 'no-repeat'
            }} 
       />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(2,6,23,0.9)_100%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-[#020617]/40 pointer-events-none z-0" />
 
       {/* Gateway Connection Status Banner */}
       {connectionStatus !== 'connected' && (
-        <div className="absolute top-0 left-0 w-full bg-red-500/20 border-b border-red-500/50 p-2 z-50 flex items-center justify-center gap-2 backdrop-blur-md">
-           <AlertCircle className="w-4 h-4 text-red-400" />
-           <span className="text-xs font-bold text-red-200 uppercase tracking-widest">
-             {connectionStatus === 'connecting' ? 'Connecting to OpenClaw Gateway...' : 'OpenClaw Gateway Offline - Showing Mock Data'}
+        <div className="absolute top-0 left-0 w-full bg-amber-500/10 border-b border-amber-500/30 p-2 z-50 flex items-center justify-center gap-3 backdrop-blur-xl">
+           <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.8)]" />
+           <span className="text-[10px] font-bold text-amber-200 uppercase tracking-[0.2em]">
+             {connectionStatus === 'connecting' ? 'SYSTEM SYNC: ATTEMPTING GATEWAY HANDSHAKE...' : 'SYSTEM SYNC: OFFLINE (OPERATING IN SIMULATION MODE)'}
            </span>
         </div>
       )}
 
       {/* Decorative Zones for Agents */}
-      <div className="absolute top-[15%] left-[5%] w-[40%] h-[35%] border border-blue-500/10 bg-blue-500/5 rounded-lg pointer-events-none flex items-start p-2"><span className="text-[10px] uppercase text-blue-500/30 font-mono">Intel & Strategy Dept</span></div>
-      <div className="absolute top-[15%] right-[5%] w-[40%] h-[35%] border border-emerald-500/10 bg-emerald-500/5 rounded-lg pointer-events-none flex items-start p-2"><span className="text-[10px] uppercase text-emerald-500/30 font-mono">Creative Dept</span></div>
-      <div className="absolute bottom-[15%] left-[20%] w-[60%] h-[35%] border border-purple-500/10 bg-purple-500/5 rounded-lg pointer-events-none flex items-start p-2"><span className="text-[10px] uppercase text-purple-500/30 font-mono">Operations & Media Dept</span></div>
+      <div className="absolute top-[15%] left-[5%] w-[40%] h-[35%] border border-blue-500/5 bg-blue-500/[0.02] rounded-xl pointer-events-none flex items-start p-3 group/zone">
+        <span className="text-[9px] uppercase text-blue-500/40 font-black tracking-widest flex items-center gap-2 group-hover/zone:text-blue-400/60 transition-colors">
+          <div className="w-1 h-1 bg-blue-500/40 rounded-full" /> INTEL & STRATEGY SECTOR
+        </span>
+      </div>
+      <div className="absolute top-[15%] right-[5%] w-[40%] h-[35%] border border-emerald-500/5 bg-emerald-500/[0.02] rounded-xl pointer-events-none flex items-start p-3 group/zone">
+        <span className="text-[9px] uppercase text-emerald-500/40 font-black tracking-widest flex items-center gap-2 group-hover/zone:text-emerald-400/60 transition-colors">
+          <div className="w-1 h-1 bg-emerald-500/40 rounded-full" /> CREATIVE & DESIGN SECTOR
+        </span>
+      </div>
+      <div className="absolute bottom-[10%] left-[15%] w-[70%] h-[35%] border border-purple-500/5 bg-purple-500/[0.02] rounded-xl pointer-events-none flex items-start p-3 group/zone">
+        <span className="text-[9px] uppercase text-purple-500/40 font-black tracking-widest flex items-center gap-2 group-hover/zone:text-purple-400/60 transition-colors">
+          <div className="w-1 h-1 bg-purple-500/40 rounded-full" /> OPERATIONS & MEDIA DEPLOYMENT
+        </span>
+      </div>
 
       <HandoffLines agents={agents} handoffs={handoffs} />
 
