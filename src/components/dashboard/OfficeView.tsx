@@ -29,12 +29,12 @@ const PixelAgent = ({ agent, onClick, isSelected }: { agent: Agent, onClick: () 
         left: `${agent.position.x}%`,
         top: `${agent.position.y}%`,
         zIndex: isSelected ? 40 : 10,
-        x: agent.status === 'Idle' ? [0, 10, -10, 0] : [0, 2, -2, 0],
-        y: agent.status === 'Idle' ? [0, -10, 10, 0] : [0, -2, 2, 0]
+        x: agent.status === 'Idle' ? [0, 60, -40, 20, -10, 0] : [0, 2, -2, 0],
+        y: agent.status === 'Idle' ? [0, -30, 20, -10, 10, 0] : [0, -2, 2, 0]
       }}
       transition={{
-         x: { duration: agent.status === 'Idle' ? 10 : 3, repeat: Infinity, ease: "easeInOut" },
-         y: { duration: agent.status === 'Idle' ? 12 : 4, repeat: Infinity, ease: "easeInOut" },
+         x: { duration: agent.status === 'Idle' ? 25 : 3, repeat: Infinity, ease: "easeInOut" },
+         y: { duration: agent.status === 'Idle' ? 30 : 4, repeat: Infinity, ease: "easeInOut" },
          scale: { duration: 0.2 },
          left: { duration: 1 },
          top: { duration: 1 }
@@ -172,11 +172,12 @@ export default function OfficeView() {
 
   return (
     <div className="relative w-full h-full min-h-[650px] bg-slate-950 border border-slate-800 rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-      <div className="absolute inset-0 pointer-events-none opacity-30 mix-blend-luminosity" 
+      <div className="absolute inset-0 bg-slate-900 z-0 pointer-events-none" />
+      <div className="absolute inset-0 pointer-events-none opacity-40 mix-blend-screen z-0" 
            style={{ 
              backgroundImage: "url('/agent-agency-dashboard/office-bg.png')", 
              backgroundSize: 'cover',
-             backgroundPosition: 'center center',
+             backgroundPosition: 'center',
              backgroundRepeat: 'no-repeat'
            }} 
       />
