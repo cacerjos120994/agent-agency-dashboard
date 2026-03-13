@@ -8,7 +8,8 @@ export type AgentStatus =
   | 'Reporting' 
   | 'Blocked' 
   | 'Delivering'
-  | 'Active';
+  | 'Active'
+  | 'Offline';
 
 export type TaskPriority = 'Low' | 'Medium' | 'High' | 'Critical';
 
@@ -21,7 +22,7 @@ export interface AgentTask {
 
 export interface Agent {
   // Core Identity
-  id: string;
+  id: string; // Used to match with OpenClaw session agentId/label
   displayName: string;
   department: string;
   mission: string;

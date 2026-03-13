@@ -6,6 +6,8 @@ import { Agent, AgentStatus, Handoff } from '@/types';
 import { INITIAL_AGENTS, INITIAL_HANDOFFS } from '@/data/mock-data';
 import { Network, AlertCircle, CheckCircle2, Zap, Info, Fingerprint, BookOpen, Wrench, ShieldCheck, HardDrive, Cpu } from 'lucide-react';
 
+import { useLiveAgents } from '@/hooks/useOpenClaw';
+
 const STATUS_COLORS: Record<AgentStatus, string> = {
   Idle: 'bg-slate-500',
   Researching: 'bg-blue-500',
@@ -16,7 +18,8 @@ const STATUS_COLORS: Record<AgentStatus, string> = {
   Reporting: 'bg-cyan-500',
   Blocked: 'bg-red-500',
   Delivering: 'bg-indigo-500',
-  Active: 'bg-orange-500'
+  Active: 'bg-orange-500',
+  Offline: 'bg-slate-800'
 };
 
 const PixelAgent = ({ agent, onClick, isSelected }: { agent: Agent, onClick: () => void, isSelected: boolean }) => {
@@ -161,7 +164,7 @@ const HandoffLines = ({ agents, handoffs }: { agents: Agent[], handoffs: Handoff
 };
 
 export default function OfficeView() {
-  const [agents] = useState<Agent[]>(INITIAL_AGENTS);
+  const { agents, connectionStatus } = useLiveAgents(INITIAL_AGENTS);
   const [handoffs] = useState<Handoff[]>(INITIAL_HANDOFFS);
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'identity' | 'sops' | 'tools'>('overview');
@@ -182,6 +185,16 @@ export default function OfficeView() {
            }} 
       />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(2,6,23,0.9)_100%)] pointer-events-none" />
+
+      {/* Gateway Connection Status Banner */}
+      {connectionStatus !== 'connected' && (
+        <div className="absolute top-0 left-0 w-full bg-red-500/20 border-b border-red-500/50 p-2 z-50 flex items-center justify-center gap-2 backdrop-blur-md">
+           <AlertCircle className="w-4 h-4 text-red-400" />
+           <span className="text-xs font-bold text-red-200 uppercase tracking-widest">
+             {connectionStatus === 'connecting' ? 'Connecting to OpenClaw Gateway...' : 'OpenClaw Gateway Offline - Showing Mock Data'}
+           </span>
+        </div>
+      )}
 
       {/* Decorative Zones for Agents */}
       <div className="absolute top-[15%] left-[5%] w-[40%] h-[35%] border border-blue-500/10 bg-blue-500/5 rounded-lg pointer-events-none flex items-start p-2"><span className="text-[10px] uppercase text-blue-500/30 font-mono">Intel & Strategy Dept</span></div>

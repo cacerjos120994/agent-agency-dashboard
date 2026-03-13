@@ -6,6 +6,8 @@ import { ActivityLog, LogEventType } from '@/types';
 import { INITIAL_LOGS } from '@/data/mock-data';
 import { Terminal, CheckCircle2, AlertTriangle, Info, Network, Zap, Package, Target, Award } from 'lucide-react';
 
+import { useOpenClaw } from '@/hooks/useOpenClaw';
+
 const LOG_ICONS: Record<LogEventType, React.ElementType> = {
   info: Info,
   success: CheckCircle2,
@@ -27,7 +29,24 @@ const LOG_COLORS: Record<LogEventType, string> = {
 };
 
 export default function ActivityFeed() {
-  const [logs] = React.useState<ActivityLog[]>(INITIAL_LOGS);
+  const [mockLogs] = React.useState<ActivityLog[]>(INITIAL_LOGS);
+  const { recentEvents, status } = useOpenClaw();
+
+  // Merge real OpenClaw chat events with mock logs for demo
+  const liveLogs = React.useMemo(() => {
+    if (status !== 'connected' || recentEvents.length === 0) return mockLogs;
+    
+    const mappedRealEvents: ActivityLog[] = recentEvents.map(ev => ({
+      id: Math.random().toString(),
+      agentId: ev.sessionKey,
+      agentName: ev.sessionKey.split(':')[0] || 'Agent', // naive extraction
+      message: ev.type === 'tool_call' ? `Running tool: ${ev.payload?.tool}` : `Agent responded`,
+      timestamp: new Date().toLocaleTimeString(),
+      type: ev.type === 'tool_call' ? 'info' : 'success'
+    }));
+
+    return [...mappedRealEvents, ...mockLogs].slice(0, 50);
+  }, [recentEvents, mockLogs, status]);
 
   const formatMessage = (msg: string) => {
     return msg.split(' ').map((word, i) => {
@@ -52,7 +71,7 @@ export default function ActivityFeed() {
       
       <div className="flex-1 overflow-y-auto p-4 space-y-3 font-mono text-[11px] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-slate-950 scrollbar-hide">
         <AnimatePresence>
-          {logs.map((log) => {
+          {liveLogs.map((log) => {
             const Icon = LOG_ICONS[log.type];
             return (
               <motion.div 
