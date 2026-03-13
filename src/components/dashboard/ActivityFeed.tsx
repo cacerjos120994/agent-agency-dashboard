@@ -38,11 +38,11 @@ export default function ActivityFeed() {
     
     const mappedRealEvents: ActivityLog[] = recentEvents.map(ev => ({
       id: Math.random().toString(),
-      agentId: ev.sessionKey,
-      agentName: ev.sessionKey.split(':')[0] || 'Agent', // naive extraction
-      message: ev.type === 'tool_call' ? `Running tool: ${ev.payload?.tool}` : `Agent responded`,
+      agentId: ev?.sessionKey || 'unknown',
+      agentName: (ev?.sessionKey && typeof ev.sessionKey === 'string') ? ev.sessionKey.split(':').pop() || 'Agent' : 'System',
+      message: ev?.type === 'tool_call' ? `Running tool: ${ev.payload?.tool}` : `Agent responded or updated status`,
       timestamp: new Date().toLocaleTimeString(),
-      type: ev.type === 'tool_call' ? 'info' : 'success'
+      type: ev?.type === 'tool_call' ? 'info' : 'success'
     }));
 
     return [...mappedRealEvents, ...mockLogs].slice(0, 50);
