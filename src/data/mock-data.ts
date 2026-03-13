@@ -4,7 +4,7 @@ import { CeoModeData } from '@/types/ceo';
 export const INITIAL_AGENTS: Agent[] = [
   {
     id: 'research-agent',
-    displayName: 'Research Agent',
+    displayName: 'Naidelin (Research)',
     department: 'Market Intelligence',
     mission: 'Detectar oportunidades de mercado, analizar competidores, identificar tendencias, entender audiencias y generar insights accionables para el sistema.',
     reportsTo: 'Manager Agent',
@@ -61,7 +61,7 @@ export const INITIAL_AGENTS: Agent[] = [
   },
   {
     id: 'strategy-agent',
-    displayName: 'Strategy Agent',
+    displayName: 'Javier (Strategy)',
     department: 'Campaign Strategy',
     mission: 'Convertir investigación y contexto de negocio en estrategia publicitaria clara, priorizada y accionable.',
     reportsTo: 'Manager Agent',
@@ -113,7 +113,7 @@ export const INITIAL_AGENTS: Agent[] = [
   },
   {
     id: 'copy-agent',
-    displayName: 'Copy Agent',
+    displayName: 'Vanina (Copy)',
     department: 'Messaging & Persuasion',
     mission: 'Convertir la estrategia en hooks, titulares, copies, guiones y mensajes persuasivos alineados a marca y objetivo.',
     reportsTo: 'Manager Agent',
@@ -166,7 +166,7 @@ export const INITIAL_AGENTS: Agent[] = [
   },
   {
     id: 'creative-direction-agent',
-    displayName: 'Creative Direction Agent',
+    displayName: 'Jose (Design)',
     department: 'Creative Systems',
     mission: 'Traducir estrategia y copy en conceptos visuales, layouts, direcciones creativas y criterios de ejecución.',
     reportsTo: 'Manager Agent',
@@ -218,7 +218,7 @@ export const INITIAL_AGENTS: Agent[] = [
   },
   {
     id: 'media-planner-agent',
-    displayName: 'Media Planner Agent',
+    displayName: 'Miguel (Media)',
     department: 'Paid Media Planning',
     mission: 'Convertir estrategia, copy y dirección creativa en un plan táctico de campaña, testing, presupuesto y despliegue.',
     reportsTo: 'Manager Agent',
@@ -270,7 +270,7 @@ export const INITIAL_AGENTS: Agent[] = [
   },
   {
     id: 'analytics-agent',
-    displayName: 'Analytics Agent',
+    displayName: 'Lucas (Analytics)',
     department: 'Performance Intelligence',
     mission: 'Interpretar señales de rendimiento, detectar patrones, identificar ganadores/perdedores y recomendar acciones.',
     reportsTo: 'Manager Agent',
@@ -321,7 +321,7 @@ export const INITIAL_AGENTS: Agent[] = [
   },
   {
     id: 'manager-agent',
-    displayName: 'Manager Agent',
+    displayName: 'Sofía (Manager)',
     department: 'Executive Control',
     mission: 'Orquestar el sistema, priorizar tareas, validar entregables, consolidar decisiones y ofrecer vista ejecutiva.',
     reportsTo: 'CEO Mode',
@@ -373,7 +373,7 @@ export const INITIAL_AGENTS: Agent[] = [
   },
   {
     id: 'automation-ops-agent',
-    displayName: 'Automation / Ops Agent',
+    displayName: 'Carlos (Ops)',
     department: 'System Operations',
     mission: 'Consolidar outputs, mantener orden operativo, registrar eventos, preparar automatizaciones y sostener la continuidad del sistema.',
     reportsTo: 'Manager Agent',

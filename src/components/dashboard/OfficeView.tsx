@@ -29,8 +29,8 @@ const PixelAgent = ({ agent, onClick, isSelected }: { agent: Agent, onClick: () 
         left: `${agent.position.x}%`,
         top: `${agent.position.y}%`,
         zIndex: isSelected ? 40 : 10,
-        x: agent.status === 'Idle' ? [0, 60, -40, 20, -10, 0] : [0, 2, -2, 0],
-        y: agent.status === 'Idle' ? [0, -30, 20, -10, 10, 0] : [0, -2, 2, 0]
+        x: agent.status === 'Idle' ? [0, 40, -20, 10, -5, 0] : [0, 1, -1, 0],
+        y: agent.status === 'Idle' ? [0, -20, 15, -5, 5, 0] : [0, -1, 1, 0]
       }}
       transition={{
          x: { duration: agent.status === 'Idle' ? 25 : 3, repeat: Infinity, ease: "easeInOut" },
@@ -42,74 +42,74 @@ const PixelAgent = ({ agent, onClick, isSelected }: { agent: Agent, onClick: () 
       className="absolute cursor-pointer group"
       onClick={onClick}
     >
-      <div className="relative w-28 h-28 flex flex-col items-center justify-center">
+      <div className="relative w-16 h-16 flex flex-col items-center justify-center transform scale-75 origin-bottom">
         <motion.div 
           animate={{ 
             opacity: agent.status !== 'Idle' ? [0.4, 0.8, 0.4] : 0.2,
             boxShadow: agent.status !== 'Idle' ? [
-              "0 0 15px rgba(59, 130, 246, 0.6)",
-              "0 0 30px rgba(59, 130, 246, 0.9)",
-              "0 0 15px rgba(59, 130, 246, 0.6)"
+              "0 0 10px rgba(59, 130, 246, 0.6)",
+              "0 0 20px rgba(59, 130, 246, 0.9)",
+              "0 0 10px rgba(59, 130, 246, 0.6)"
             ] : "none"
           }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute w-14 h-10 bg-slate-900 border-[3px] border-slate-700 rounded-sm -mt-6 z-10 shadow-[inset_0_0_10px_rgba(0,0,0,0.8)]"
+          className="absolute w-10 h-7 bg-slate-900 border-2 border-slate-700 rounded-sm -mt-4 z-10 shadow-[inset_0_0_8px_rgba(0,0,0,0.8)]"
         />
         
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mt-4 w-20 h-8 bg-slate-800 border-t-2 border-slate-600 rounded-sm shadow-xl z-0 transform perspective-[200px] rotateX-12" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mt-3 w-14 h-6 bg-slate-800 border-t border-slate-600 rounded-sm shadow-xl z-0 transform perspective-[200px] rotateX-12" />
         
         <motion.div 
            whileHover={{ y: -2 }}
-           className="relative z-20 w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-700 rounded-sm border-2 border-orange-900 shadow-lg mt-2"
+           className="relative z-20 w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-700 rounded-sm border border-orange-900 shadow-lg mt-1"
         >
-           <div className="absolute top-2 left-1.5 w-2.5 h-2.5 bg-white rounded-full flex items-center justify-center">
+           <div className="absolute top-1.5 left-1 w-1.5 h-1.5 bg-white rounded-full flex items-center justify-center">
               <motion.div 
                  animate={agent.status === 'Idle' ? { scaleY: [1, 0.1, 1] } : {}}
                  transition={{ duration: 4, repeat: Infinity, times: [0, 0.05, 0.1] }}
-                 className="w-1.5 h-1.5 bg-black rounded-full" 
+                 className="w-1 h-1 bg-black rounded-full" 
               />
            </div>
-           <div className="absolute top-2 right-1.5 w-2.5 h-2.5 bg-white rounded-full flex items-center justify-center">
+           <div className="absolute top-1.5 right-1 w-1.5 h-1.5 bg-white rounded-full flex items-center justify-center">
               <motion.div 
                  animate={agent.status === 'Idle' ? { scaleY: [1, 0.1, 1] } : {}}
                  transition={{ duration: 4, repeat: Infinity, times: [0, 0.05, 0.1] }}
-                 className="w-1.5 h-1.5 bg-black rounded-full" 
+                 className="w-1 h-1 bg-black rounded-full" 
               />
            </div>
            
-           <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-6 h-4 bg-orange-100 rounded-sm shadow-inner border border-orange-300">
-             <div className="absolute top-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1 bg-slate-900 rounded-full" />
+           <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-2.5 bg-orange-100 rounded-sm shadow-inner border border-orange-300">
+             <div className="absolute top-0.5 left-1/2 -translate-x-1/2 w-1 h-0.5 bg-slate-900 rounded-full" />
            </div>
            
-           <div className="absolute -top-3 left-0 w-3 h-4 bg-orange-600 border-2 border-orange-900 skew-y-12 rounded-t-sm z-[-1]" />
-           <div className="absolute -top-3 right-0 w-3 h-4 bg-orange-600 border-2 border-orange-900 -skew-y-12 rounded-t-sm z-[-1]" />
+           <div className="absolute -top-2 left-0 w-2 h-3 bg-orange-600 border border-orange-900 skew-y-12 rounded-t-sm z-[-1]" />
+           <div className="absolute -top-2 right-0 w-2 h-3 bg-orange-600 border border-orange-900 -skew-y-12 rounded-t-sm z-[-1]" />
            
            {agent.status !== 'Idle' && (
-             <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+             <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
                <motion.div
-                 animate={{ y: [0, -4, 0] }}
+                 animate={{ y: [0, -3, 0] }}
                  transition={{ duration: 0.15, repeat: Infinity, delay: 0 }}
-                 className="w-2 h-3 bg-orange-800 rounded-sm"
+                 className="w-1.5 h-2 bg-orange-800 rounded-sm"
                />
                <motion.div
-                 animate={{ y: [0, -4, 0] }}
+                 animate={{ y: [0, -3, 0] }}
                  transition={{ duration: 0.15, repeat: Infinity, delay: 0.07 }}
-                 className="w-2 h-3 bg-orange-800 rounded-sm"
+                 className="w-1.5 h-2 bg-orange-800 rounded-sm"
                />
              </div>
            )}
         </motion.div>
 
-        <div className="absolute -right-2 top-0 group-hover:scale-125 transition-transform z-30">
-           <div className={`w-3.5 h-3.5 rounded-full border-2 border-slate-950 shadow-md ${STATUS_COLORS[agent.status]}`}>
+        <div className="absolute -right-1 top-1 group-hover:scale-125 transition-transform z-30">
+           <div className={`w-2.5 h-2.5 rounded-full border border-slate-950 shadow-md ${STATUS_COLORS[agent.status]}`}>
              {agent.status !== 'Idle' && <div className="absolute inset-0 rounded-full animate-ping opacity-50 bg-inherit" />}
            </div>
         </div>
         
-        <div className={`absolute -bottom-8 px-2.5 py-1 rounded border shadow-lg whitespace-nowrap z-30 transition-all ${isSelected ? 'bg-orange-500/20 border-orange-500 text-orange-100' : 'bg-slate-900/80 border-slate-700/80 text-slate-300 group-hover:bg-slate-800 group-hover:border-slate-500'}`}>
-          <div className="text-[10px] font-bold tracking-wider uppercase flex items-center gap-1.5">
+        <div className={`absolute -bottom-6 px-1.5 py-0.5 rounded border shadow-lg whitespace-nowrap z-30 transition-all ${isSelected ? 'bg-orange-500/20 border-orange-500 text-orange-100' : 'bg-slate-900/80 border-slate-700/80 text-slate-300 group-hover:bg-slate-800 group-hover:border-slate-500'}`}>
+          <div className="text-[8px] font-bold tracking-wider uppercase flex items-center gap-1">
              {agent.displayName}
-             <span className={`w-1.5 h-1.5 rounded-full ${STATUS_COLORS[agent.status]}`} />
+             <span className={`w-1 h-1 rounded-full ${STATUS_COLORS[agent.status]}`} />
           </div>
         </div>
       </div>
