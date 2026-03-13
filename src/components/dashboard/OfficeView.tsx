@@ -28,7 +28,16 @@ const PixelAgent = ({ agent, onClick, isSelected }: { agent: Agent, onClick: () 
         scale: isSelected ? 1.1 : 1,
         left: `${agent.position.x}%`,
         top: `${agent.position.y}%`,
-        zIndex: isSelected ? 40 : 10
+        zIndex: isSelected ? 40 : 10,
+        x: agent.status === 'Idle' ? [0, 10, -10, 0] : [0, 2, -2, 0],
+        y: agent.status === 'Idle' ? [0, -10, 10, 0] : [0, -2, 2, 0]
+      }}
+      transition={{
+         x: { duration: agent.status === 'Idle' ? 10 : 3, repeat: Infinity, ease: "easeInOut" },
+         y: { duration: agent.status === 'Idle' ? 12 : 4, repeat: Infinity, ease: "easeInOut" },
+         scale: { duration: 0.2 },
+         left: { duration: 1 },
+         top: { duration: 1 }
       }}
       className="absolute cursor-pointer group"
       onClick={onClick}
@@ -163,11 +172,12 @@ export default function OfficeView() {
 
   return (
     <div className="relative w-full h-full min-h-[650px] bg-slate-950 border border-slate-800 rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-      <div className="absolute inset-0 pointer-events-none" 
+      <div className="absolute inset-0 pointer-events-none opacity-30 mix-blend-luminosity" 
            style={{ 
-             backgroundImage: 'linear-gradient(rgba(30, 41, 59, 0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(30, 41, 59, 0.4) 1px, transparent 1px)', 
-             backgroundSize: '40px 40px',
-             backgroundPosition: 'center center'
+             backgroundImage: "url('/agent-agency-dashboard/office-bg.png')", 
+             backgroundSize: 'cover',
+             backgroundPosition: 'center center',
+             backgroundRepeat: 'no-repeat'
            }} 
       />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(2,6,23,0.9)_100%)] pointer-events-none" />
