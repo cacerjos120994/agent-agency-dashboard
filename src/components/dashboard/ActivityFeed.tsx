@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ActivityLog, LogEventType } from '@/types';
 import { INITIAL_LOGS } from '@/data/mock-data';
-import { Terminal, CheckCircle2, AlertTriangle, Info, Network, Zap, Package } from 'lucide-react';
+import { Terminal, CheckCircle2, AlertTriangle, Info, Network, Zap, Package, Target, Award } from 'lucide-react';
 
 const LOG_ICONS: Record<LogEventType, React.ElementType> = {
   info: Info,
@@ -27,13 +27,13 @@ const LOG_COLORS: Record<LogEventType, string> = {
 };
 
 export default function ActivityFeed() {
-  const [logs, setLogs] = useState<ActivityLog[]>(INITIAL_LOGS);
+  const [logs] = useState<ActivityLog[]>(INITIAL_LOGS);
 
   return (
     <div className="bg-slate-900 border border-slate-800 rounded-xl flex flex-col h-full overflow-hidden shadow-xl">
-      <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/80 backdrop-blur-md">
+      <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/80 backdrop-blur-md shrink-0">
         <h3 className="text-xs font-bold uppercase tracking-widest text-slate-300 flex items-center gap-2">
-           <Terminal className="w-4 h-4 text-blue-500" /> System Logs
+           <Terminal className="w-4 h-4 text-blue-500" /> Agency Action Log
         </h3>
         <div className="flex items-center gap-2 px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded text-[10px] text-emerald-400 font-mono font-bold uppercase tracking-widest">
           <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
@@ -41,7 +41,7 @@ export default function ActivityFeed() {
         </div>
       </div>
       
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 font-mono text-[11px] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-slate-950">
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 font-mono text-[11px] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-slate-950 scrollbar-hide">
         <AnimatePresence>
           {logs.map((log) => {
             const Icon = LOG_ICONS[log.type];
@@ -51,19 +51,37 @@ export default function ActivityFeed() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                className={`flex gap-3 p-2.5 rounded-lg border backdrop-blur-sm group hover:bg-slate-800/50 transition-colors ${LOG_COLORS[log.type]}`}
+                className={`flex gap-3 p-3 rounded-lg border backdrop-blur-sm group hover:bg-slate-800/80 transition-colors ${LOG_COLORS[log.type]}`}
               >
                 <div className="mt-0.5 shrink-0">
                   <Icon className="w-3.5 h-3.5" />
                 </div>
-                <div className="flex-1 space-y-1">
+                <div className="flex-1 space-y-2">
                   <div className="flex justify-between items-start">
-                     <span className="font-bold opacity-90">[{log.agentName}]</span>
-                     <span className="opacity-50 text-[10px] tabular-nums tracking-tighter">{log.timestamp}</span>
+                     <span className="font-bold opacity-90 uppercase tracking-wider">{log.agentName}</span>
+                     <span className="opacity-50 text-[10px] tabular-nums tracking-tighter bg-slate-950 px-1.5 rounded">{log.timestamp}</span>
                   </div>
-                  <div className="text-slate-300 leading-relaxed font-sans text-xs">
+                  <div className="text-slate-300 leading-relaxed font-sans text-xs border-l-2 border-current pl-2 py-0.5">
                     {log.message}
                   </div>
+                  
+                  {/* Rich Metadata Section */}
+                  {(log.objective || log.result) && (
+                    <div className="mt-2 pt-2 border-t border-slate-700/50 grid grid-cols-2 gap-2 text-[9px] font-sans">
+                      {log.objective && (
+                        <div className="flex items-start gap-1">
+                           <Target className="w-3 h-3 text-amber-500 shrink-0 mt-0.5" />
+                           <span className="text-slate-400 leading-tight"><strong className="text-slate-500 uppercase tracking-widest block mb-0.5">Objective</strong> {log.objective}</span>
+                        </div>
+                      )}
+                      {log.result && (
+                        <div className="flex items-start gap-1">
+                           <Award className="w-3 h-3 text-emerald-500 shrink-0 mt-0.5" />
+                           <span className="text-slate-400 leading-tight"><strong className="text-slate-500 uppercase tracking-widest block mb-0.5">Result</strong> {log.result}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </motion.div>
             );

@@ -3,13 +3,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { INITIAL_DELIVERABLES } from '@/data/mock-data';
-import { Package, FileText, Lightbulb, PenTool, LayoutTemplate, BarChart3, Bell } from 'lucide-react';
+import { Package, FileText, Lightbulb, PenTool, LayoutTemplate, BarChart3, Bell, Palette } from 'lucide-react';
 import { Deliverable } from '@/types';
 
 const TYPE_ICONS: Record<Deliverable['type'], React.ElementType> = {
   Insight: Lightbulb,
   Hypothesis: PenTool,
   Copy: FileText,
+  Design: Palette,
   Plan: LayoutTemplate,
   Report: BarChart3,
   Alert: Bell,
@@ -19,6 +20,7 @@ const TYPE_COLORS: Record<Deliverable['type'], string> = {
   Insight: 'text-amber-400 border-amber-500/20 bg-amber-500/10',
   Hypothesis: 'text-purple-400 border-purple-500/20 bg-purple-500/10',
   Copy: 'text-emerald-400 border-emerald-500/20 bg-emerald-500/10',
+  Design: 'text-pink-400 border-pink-500/20 bg-pink-500/10',
   Plan: 'text-blue-400 border-blue-500/20 bg-blue-500/10',
   Report: 'text-indigo-400 border-indigo-500/20 bg-indigo-500/10',
   Alert: 'text-red-400 border-red-500/20 bg-red-500/10',

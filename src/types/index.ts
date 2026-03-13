@@ -2,6 +2,7 @@ export type AgentRole =
   | 'Research' 
   | 'Ads Strategist' 
   | 'Creative Copy' 
+  | 'Creative Direction' 
   | 'Media Planner' 
   | 'Analytics' 
   | 'Automation' 
@@ -12,6 +13,7 @@ export type AgentStatus =
   | 'Researching' 
   | 'Analyzing' 
   | 'Writing' 
+  | 'Designing'
   | 'Planning' 
   | 'Reporting' 
   | 'Blocked' 
@@ -26,6 +28,45 @@ export interface AgentTask {
   priority: TaskPriority;
 }
 
+export interface AgentIdentity {
+  mission: string;
+  reportsTo: string;
+  collaboratesWith: string[];
+  workStyle: string;
+  antiPatterns: string[];
+}
+
+export interface AgentConduct {
+  principles: string[];
+  inputFormat: string;
+  outputFormat: string;
+  restrictions: string[];
+  mandatorySteps: string[];
+  escalationRules: string;
+}
+
+export interface AgentTools {
+  native: string[];
+  shared: string[];
+  allowedActions: string[];
+}
+
+export interface AgentMemory {
+  localCapacity: string;
+  sharedContexts: string[];
+  totalInsightsStored: number;
+}
+
+export interface AgentSkills {
+  sops: Array<{ name: string; description: string; steps: string[] }>;
+}
+
+export interface AgentMaintenance {
+  selfCheckInterval: string;
+  recoveryProtocol: string;
+  qaScore: number;
+}
+
 export interface Agent {
   id: string;
   name: string;
@@ -33,6 +74,15 @@ export interface Agent {
   status: AgentStatus;
   specialty: string;
   description: string;
+  
+  // New Rich Architecture Elements
+  identity: AgentIdentity;
+  conduct: AgentConduct;
+  tools: AgentTools;
+  memory: AgentMemory;
+  skills: AgentSkills;
+  maintenance: AgentMaintenance;
+
   tasksCompleted: number;
   currentTask?: string;
   taskQueue: AgentTask[];
@@ -67,12 +117,14 @@ export interface ActivityLog {
   message: string;
   timestamp: string;
   type: LogEventType;
+  objective?: string;
+  result?: string;
 }
 
 export interface Deliverable {
   id: string;
   title: string;
-  type: 'Insight' | 'Hypothesis' | 'Copy' | 'Plan' | 'Report' | 'Alert';
+  type: 'Insight' | 'Hypothesis' | 'Copy' | 'Design' | 'Plan' | 'Report' | 'Alert';
   content: string;
   authorId: string;
   authorName: string;
